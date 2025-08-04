@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>My info</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      cursor: pointer;
+    }
+
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      filter: blur(4px) brightness(0.5);
+    }
+
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 30px 50px;
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+      cursor: move;
+      user-select: none;
+      display: none;
+    }
+
+    .content.dragging {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .content h1 {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .content p {
+      font-size: 20px;
+    }
+
+    .secret-button {
+      margin-top: 20px;
+    }
+
+    .secret-button button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background: #00ffff;
+      color: black;
+      cursor: pointer;
+    }
+
+    .social-links {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 25px;
+      border-radius: 20px;
+      z-index: 1000;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      display: none;
+    }
+
+    .social-links a {
+      display: inline-block;
+    }
+
+    .social-icon {
+      width: 32px;
+      height: 32px;
+      filter: brightness(0) invert(1);
+      transition: transform 0.3s ease;
+    }
+
+    .social-icon:hover {
+      transform: scale(1.2);
+    }
+
+    #passwordModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #passwordBox {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    #passwordBox input {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+      margin-bottom: 10px;
+    }
+
+    #passwordBox button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #00bcd4;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #passwordBox p {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="passwordModal">
+    <div id="passwordBox">
+      <h2>Nhập mật khẩu để truy cập</h2>
+      <input type="password" id="passwordInput" placeholder="Mật khẩu...">
+      <br>
+      <button onclick="checkPassword()">Vào</button>
+      <p id="errorMsg">Sai mật khẩu!</p>
+    </div>
+  </div>
+
+  <video id="bg-video" autoplay loop muted playsinline>
+    <source src="video nền.mp4" type="video/mp4">
+    Trình duyệt của bạn không hỗ trợ video.
+  </video>
+
+  <div class="content" id="mainContent">
+    <h1>Xin chào</h1>
+    <p>I AM DUNG</p>
+    <div class="secret-button">
+      <button onclick="enterSecret()">sít rịt 🔒</button>
+    </div>
+  </div>
+
+  <div class="social-links" id="socialLinks">
+    <a href="https://www.facebook.com/laylinkprofilebocoincak" target="_blank">
+      <img src="tải_xuống-removebg-preview.png" alt="Facebook" class="social-icon">
+    </a>
+    <a href="https://www.emailnator.com/" target="_blank">
+      <img src="tải_xuống__1_-removebg-preview.png" alt="GitHub" class="social-icon">
+    </a>
+  </div>
+
+  <script>
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value;
+      const modal = document.getElementById("passwordModal");
+      const content = document.getElementById("mainContent");
+      const socials = document.getElementById("socialLinks");
+      const error = document.getElementById("errorMsg");
+
+      if (input === "dunghoang1019") {
+        modal.style.display = "none";
+        content.style.display = "block";
+        socials.style.display = "flex";
+      } else {
+        error.style.display = "block";
+      }
+    }
+
+    function enterSecret() {
+      window.location.href = "https://admin.2z2.top";
+    }
+
+    const video = document.getElementById('bg-video');
+    window.addEventListener('click', () => {
+      video.muted = false;
+      video.play();
+    });
+
+    const box = document.getElementById('mainContent');
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    box.addEventListener('mousedown', function (e) {
+      isDragging = true;
+      offsetX = e.clientX - box.offsetLeft;
+      offsetY = e.clientY - box.offsetTop;
+      box.classList.add('dragging');
+    });
+
+    document.addEventListener('mousemove', function (e) {
+      if (isDragging) {
+        box.style.left = e.clientX - offsetX + 'px';
+        box.style.top = e.clientY - offsetY + 'px';
+        box.style.transform = 'none';
+      }
+    });
+
+    document.addEventListener('mouseup', function () {
+      isDragging = false;
+      box.classList.remove('dragging');
+    });
+  </script>
+</body>
+</html>
+<script>
+  document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'F12') {
+      e.preventDefault();
+    }
+    if (
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+      (e.ctrlKey && (e.key === 'U' || e.key === 'S')) ||
+      (e.metaKey && (e.key === 'S'))
+    ) {
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener('dragstart', function (e) {
+    e.preventDefault();
+  });
+</script>
+<script>
+  let devtoolsOpen = false;
+
+  const checkDevTools = () => {
+    const threshold = 160; // ms
+    const start = new Date();
+    debugger;
+    const end = new Date();
+    if (end - start > threshold) {
+      devtoolsOpen = true;
+      window.location.href = "https://google.com";
+    }
+  };
+
+  setInterval(checkDevTools, 1000); 
+</script>
